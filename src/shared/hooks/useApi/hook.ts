@@ -3,13 +3,13 @@ import {useMutation, useQuery,} from '@tanstack/react-query'
 import type {ApiError} from "@/shared/hooks/useApi/types.ts";
 import {useAuthStore} from "@/shared/stores/authStore.ts";
 
-const BASE_URL = 'http://192.168.0.183:3000'
+const BASE_URL = import.meta.env.VITE_PUBLIC_BASE_URL
 
 const httpClient = async <TResponse>(
     endpoint: string,
     options: RequestInit & { token?: string } = {}
 ): Promise<TResponse> => {
-    const {accessToken} = useAuthStore.getState(); // Obtenemos el token del store
+    const {accessToken} = useAuthStore.getState();
 
     const url = `${BASE_URL}${endpoint}`;
 
