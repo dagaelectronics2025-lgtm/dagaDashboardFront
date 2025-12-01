@@ -8,7 +8,7 @@ export enum EProductRoles {
 // API
 
 export interface Product {
-    id: number
+    id: string
     email: string
     productname: string
     role: EProductRoles

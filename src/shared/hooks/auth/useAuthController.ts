@@ -9,7 +9,7 @@ export const useAuthController = () => {
     // FIREBASE AUTH METHODS
     // const {auth, signInWithEmailAndPassword, signOut} = useFirebase()
 
-    const {setAccessToken, setIsAuthenticated, getUserRole, clearSession, isAuthenticated} = useAuthStore()
+    const {setAccessToken, setIsAuthenticated, setUser, getUserRole, clearSession, isAuthenticated} = useAuthStore()
 
     const {useSignIn} = useAuthApi()
     const {mutate: signIn, isPending: loadingSignIn} = useSignIn()
@@ -17,9 +17,10 @@ export const useAuthController = () => {
     const logIn = async (email: string, password: string) =>
         signIn({email, password}, {
             onSuccess: (data) => {
-                console.log("SIGN IN USER >> ", data.token)
+                console.log("SIGN IN USER >> ", data)
 
-                setAccessToken(data.token)
+                setUser({username: data.username, role: data.role})
+                setAccessToken(data.access_token)
                 setIsAuthenticated(true)
                 navigate("/dashboard")
 

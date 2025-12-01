@@ -1,3 +1,5 @@
+import type {RoleKey} from "@/shared/hooks/usePermissions/types.ts";
+
 export enum EUserRoles {
     ADMIN = 'admin',
     MANAGER = 'manager',
@@ -21,10 +23,13 @@ export interface CreateUserDto {
     email: string
     password: string
     username: string
-    role: EUserRoles
+    role: RoleKey
 }
 
 export interface UpdateUserDto {
-    name?: string
-    email?: string
+    name: string
+    email: string
+    password: string
+    username: string
+    role: RoleKey
 }

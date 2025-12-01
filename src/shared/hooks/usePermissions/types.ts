@@ -55,7 +55,7 @@ export const PERMISSION_GROUPS = {
         'products:categories:manage'
     ] as ProductPermissions[]
 
-} as const;
+} as { [key: string]: Permission[] };
 
 // =============================================
 // TIPOS PARA VALIDACIÓN Y CONFIGURACIÓN

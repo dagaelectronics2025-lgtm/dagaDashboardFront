@@ -3,16 +3,16 @@ import {Avatar, AvatarFallback, AvatarImage} from "@/shared/components/avatar.ts
 import {Badge} from "@/shared/components/badge.tsx";
 import {TableActionsUser} from "@/modules/users/components/table/TableActionsUser.tsx";
 import {ModalCreateUser} from "@/modules/users/components/modal/ModalCreateUser.tsx";
-// import {useUserController} from "@/modules/users/hooks/useUserController.tsx";
-import {authorsData} from "@/shared/lib/data.ts";
+import {useUserController} from "@/modules/users/hooks/useUserController.tsx";
 import type {User} from "@/modules/users/data/types.ts";
 import {usePermissions} from "@/shared/hooks/usePermissions/hook.ts";
 
 export const Users = () => {
 
-    const {canManageUsers} = usePermissions()
+    const {canManageUsers, can} = usePermissions()
 
-    // const {users} = useUserController()
+    const {users} = useUserController()
+
     return (
         <div className="h-full overflow-y-auto p-6 custom-scrollbar">
             <div className="space-y-6">
@@ -21,7 +21,9 @@ export const Users = () => {
                     <CardHeader className="border-b border-stone-200">
                         <CardTitle className="text-lg font-semibold text-stone-900">Tabla de Usuarios</CardTitle>
                         <CardAction>
-                            <ModalCreateUser/>
+                            {
+                                can('users:create') && <ModalCreateUser/>
+                            }
                         </CardAction>
                     </CardHeader>
 
@@ -49,7 +51,7 @@ export const Users = () => {
                                 </tr>
                                 </thead>
                                 <tbody className="bg-white divide-y divide-stone-200">
-                                {authorsData?.map((user) => (
+                                {users?.map((user) => (
                                     <tr key={user.id} className="hover:bg-stone-50">
                                         <td className="px-6 py-4 whitespace-nowrap">
                                             <div className="flex items-center">
