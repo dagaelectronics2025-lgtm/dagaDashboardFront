@@ -1,36 +1,19 @@
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger
-} from "@/shared/components/dropdown-menu.tsx";
-import {Button} from "@/shared/components/button.tsx";
-import {EllipsisVertical} from "lucide-react";
+import type {User} from "@/modules/users/data/types.ts";
+import {ModalEditUser} from "@/modules/users/components/modal/ModalEditUser.tsx";
+import {usePermissions} from "@/shared/hooks/usePermissions/hook.ts";
 
-export const TableActionsUser = () => {
+interface TableActionsUserProps {
+    user: User
+}
+
+export const TableActionsUser = ({user}: TableActionsUserProps) => {
+
+    const {can} = usePermissions()
+
     return (
-        <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon">
-                    <EllipsisVertical/>
-                </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className="bg-white w-56">
-                <DropdownMenuLabel>Acciones</DropdownMenuLabel>
-                <DropdownMenuSeparator className=""/>
-                <DropdownMenuItem
-                    onClick={() => console.log("EDITAR")}
-                >
-                    Editar
-                </DropdownMenuItem>
-                <DropdownMenuItem
-                    onClick={() => console.log("ELIMINAR")}
-                >
-                    Eliminar
-                </DropdownMenuItem>
-            </DropdownMenuContent>
-        </DropdownMenu>
+        <div className="flex justify-center gap-2">
+            {can("users:update") && <ModalEditUser user={user}/>}
+        </div>
+
     )
 }
