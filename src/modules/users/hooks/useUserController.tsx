@@ -9,10 +9,10 @@ import {useState} from "react";
 
 export const useUserController = () => {
 
-    const {useCreateUser, useGetUsers, useDeleteUser} = useUsersApi()
+    const {useCreateUser, useUpdateUser, useGetUsers, useDeleteUser} = useUsersApi()
 
+    // DATA
     const {data: users, refetch: refetchUsers} = useGetUsers()
-    const {mutate: create} = useCreateUser()
 
     // STATES
     const [showDialogCreate, setShowDialogCreate] = useState(false)
@@ -20,8 +20,12 @@ export const useUserController = () => {
     const [selectedUser, setSelectedUser] = useState<User | null>(null)
 
     // ACTIONS
+    const {mutate: create} = useCreateUser()
+    const {mutate: update} = useUpdateUser(selectedUser?.id || "")
     const {mutateAsync: deleteUser} = useDeleteUser(selectedUser?.id || "")
 
+
+    // FORMS
     const formCreate = useForm<z.infer<typeof createSchema>>({
         resolver: zodResolver(createSchema),
         defaultValues: {
@@ -34,6 +38,18 @@ export const useUserController = () => {
         }
     })
 
+    const formEdit = useForm<z.infer<typeof createSchema>>({
+        resolver: zodResolver(createSchema),
+        defaultValues: {
+            name: selectedUser?.name || "",
+            email: selectedUser?.email || "",
+            password: "",
+            confirmPassword: "",
+            username: selectedUser?.username || "",
+            role: selectedUser?.role || EUserRoles.SELLER
+        }
+    })
+
     const onCreate = (values: z.infer<typeof createSchema>) => {
         const {confirmPassword, ...restValues} = values
         create(
@@ -43,6 +59,20 @@ export const useUserController = () => {
                     toast.success("Usuario creado exitosamente", {className: "success"})
                     await refetchUsers().then(() => setShowDialogCreate(false))
                     formCreate.reset()
+                }
+            }
+        )
+    }
+
+    const onUpdate = (values: z.infer<typeof createSchema>) => {
+        const {confirmPassword, ...restValues} = values
+        update(
+            restValues, {
+                onSuccess: async (values) => {
+                    console.log("USER UPDATED >> ", values)
+                    toast.success("Usuario actualizado exitosamente", {className: "success"})
+                    await refetchUsers().then(() => setShowDialogEdit(false))
+                    formEdit.reset()
                 }
             }
         )
@@ -66,8 +96,10 @@ export const useUserController = () => {
         showDialogEdit,
         selectedUser,
         formCreate,
+        formEdit,
         // METHODS
         onCreate,
+        onUpdate,
         onDelete,
         setShowDialogCreate,
         setShowDialogEdit,

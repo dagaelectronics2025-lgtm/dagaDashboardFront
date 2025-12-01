@@ -23,3 +23,5 @@ export const createSchema = z.object({
     message: "Contraseña y Confirmacion deben ser iguales",
     path: ["confirmPassword"]
 })
+
+export const editSchema = createSchema.omit({});

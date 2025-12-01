@@ -13,7 +13,7 @@ export const useUsersApi = () => {
     const useCreateUser = () =>
         usePost<User, CreateUserDto>('/users')
 
-    const useUpdateUser = (userId: number) =>
+    const useUpdateUser = (userId: User["id"]) =>
         usePut<User, UpdateUserDto>(`/users/${userId}`)
 
     const useDeleteUser = (userId: User["id"]) =>

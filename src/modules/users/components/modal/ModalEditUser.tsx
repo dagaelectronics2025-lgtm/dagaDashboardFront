@@ -14,7 +14,6 @@ import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/s
 import {useUserController} from "@/modules/users/hooks/useUserController.tsx";
 import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage} from "@/shared/components/form.tsx";
 import {userRolesOptions} from "@/modules/users/data/utils.ts";
-import {useEffect} from "react";
 import type {User} from "@/modules/users/data/types.ts";
 import {PencilIcon} from "lucide-react";
 
@@ -24,15 +23,26 @@ interface ModalEditUserProps {
 
 export const ModalEditUser = ({user}: ModalEditUserProps) => {
 
-    const {formCreate, showDialogEdit, setShowDialogEdit, setSelectedUser, onCreate} = useUserController()
+    const {formEdit, showDialogEdit, setShowDialogEdit, setSelectedUser, onUpdate} = useUserController()
 
-    useEffect(() => {
-        if (user) {
+    const setFormValues = (user: User) => {
+        formEdit.setValue("name", user.name)
+        formEdit.setValue("email", user.email)
+        formEdit.setValue("username", user.username)
+        formEdit.setValue("role", user.role)
+        formEdit.setValue("password", "")
+        formEdit.setValue("confirmPassword", "")
+    }
+
+    const onOpenChange = (open: boolean) => {
+        setShowDialogEdit(open)
+        if (open) {
             setSelectedUser(user)
+            setFormValues(user)
         }
-    }, [user]);
+    }
 
-    return (<Dialog open={showDialogEdit} onOpenChange={setShowDialogEdit}>
+    return (<Dialog open={showDialogEdit} onOpenChange={onOpenChange}>
         <DialogTrigger>
             <Button variant="ghost" size="icon">
                 <PencilIcon className="h-5 w-5"/>
@@ -45,12 +55,12 @@ export const ModalEditUser = ({user}: ModalEditUserProps) => {
                     Edicion de usuarios para la plataforma.
                 </DialogDescription>
             </DialogHeader>
-            <Form {...formCreate}>
-                <form onSubmit={formCreate.handleSubmit(onCreate)}>
+            <Form {...formEdit}>
+                <form onSubmit={formEdit.handleSubmit(onUpdate)}>
                     <div className="grid gap-4 mb-4">
                         <div className="grid gap-3">
                             <FormField
-                                control={formCreate.control}
+                                control={formEdit.control}
                                 name="name"
                                 render={({field}) => (
                                     <FormItem>
@@ -67,7 +77,7 @@ export const ModalEditUser = ({user}: ModalEditUserProps) => {
                         </div>
                         <div className="grid gap-3">
                             <FormField
-                                control={formCreate.control}
+                                control={formEdit.control}
                                 name="email"
                                 render={({field}) => (
                                     <FormItem>
@@ -84,7 +94,7 @@ export const ModalEditUser = ({user}: ModalEditUserProps) => {
                         </div>
                         <div className="grid gap-3">
                             <FormField
-                                control={formCreate.control}
+                                control={formEdit.control}
                                 name="password"
                                 render={({field}) => (
                                     <FormItem>
@@ -101,7 +111,7 @@ export const ModalEditUser = ({user}: ModalEditUserProps) => {
                         </div>
                         <div className="grid gap-3">
                             <FormField
-                                control={formCreate.control}
+                                control={formEdit.control}
                                 name="confirmPassword"
                                 render={({field}) => (
                                     <FormItem>
@@ -118,7 +128,7 @@ export const ModalEditUser = ({user}: ModalEditUserProps) => {
                         </div>
                         <div className="grid gap-3">
                             <FormField
-                                control={formCreate.control}
+                                control={formEdit.control}
                                 name="username"
                                 render={({field}) => (
                                     <FormItem>
@@ -134,7 +144,7 @@ export const ModalEditUser = ({user}: ModalEditUserProps) => {
                             />
                         </div>
                         <div className="grid gap-3">
-                            <FormField control={formCreate.control} name="role" render={
+                            <FormField control={formEdit.control} name="role" render={
                                 ({field}) => (
                                     <FormItem>
                                         <FormLabel>Rol de Usuario</FormLabel>
@@ -166,9 +176,9 @@ export const ModalEditUser = ({user}: ModalEditUserProps) => {
                     </div>
                     <DialogFooter>
                         <DialogClose asChild>
-                            <Button variant="default" onClick={() => formCreate.reset()}>Cancelar</Button>
+                            <Button variant="default" onClick={() => formEdit.reset()}>Cancelar</Button>
                         </DialogClose>
-                        <Button variant="outline" type="submit">Crear Usuario</Button>
+                        <Button variant="outline" type="submit">Editar Usuario</Button>
                     </DialogFooter>
                 </form>
             </Form>
