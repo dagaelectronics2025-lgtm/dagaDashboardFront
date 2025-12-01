@@ -1,9 +1,9 @@
 import {NavLink, useLocation} from "react-router-dom";
-import {LayoutDashboard, LogOut, User, X} from "lucide-react";
+import {LayoutDashboard, LogOut, ShoppingBag, User, X} from "lucide-react";
 import {Button} from "@/shared/components/button.tsx";
 import {cn} from "@/shared/lib/utils.ts";
 import {Separator} from "@/shared/components/separator.tsx";
-import {useAuthController} from "@/shared/hooks/useAuthController.ts";
+import {useAuthController} from "@/shared/hooks/auth/useAuthController.ts";
 
 const navItems = [
     {
@@ -15,6 +15,11 @@ const navItems = [
         title: "Usuarios",
         href: "/users",
         icon: User,
+    },
+    {
+        title: "Productos",
+        href: "/products",
+        icon: ShoppingBag,
     },
     // {
     //     title: "Tables",

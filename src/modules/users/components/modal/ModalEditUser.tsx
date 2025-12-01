@@ -14,21 +14,35 @@ import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/s
 import {useUserController} from "@/modules/users/hooks/useUserController.tsx";
 import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage} from "@/shared/components/form.tsx";
 import {userRolesOptions} from "@/modules/users/data/utils.ts";
+import {useEffect} from "react";
+import type {User} from "@/modules/users/data/types.ts";
+import {PencilIcon} from "lucide-react";
 
+interface ModalEditUserProps {
+    user: User
+}
 
-export const ModalCreateUser = () => {
+export const ModalEditUser = ({user}: ModalEditUserProps) => {
 
-    const {formCreate, showDialogCreate, setShowDialogCreate, onCreate} = useUserController()
+    const {formCreate, showDialogEdit, setShowDialogEdit, setSelectedUser, onCreate} = useUserController()
 
-    return (<Dialog open={showDialogCreate} onOpenChange={setShowDialogCreate}>
-        <DialogTrigger asChild>
-            <Button variant="outline">Crear Usuario</Button>
+    useEffect(() => {
+        if (user) {
+            setSelectedUser(user)
+        }
+    }, [user]);
+
+    return (<Dialog open={showDialogEdit} onOpenChange={setShowDialogEdit}>
+        <DialogTrigger>
+            <Button variant="ghost" size="icon">
+                <PencilIcon className="h-5 w-5"/>
+            </Button>
         </DialogTrigger>
         <DialogContent className="sm:max-w-[425px] bg-white">
             <DialogHeader>
-                <DialogTitle>Crear Usuario</DialogTitle>
+                <DialogTitle>Editar Usuario</DialogTitle>
                 <DialogDescription>
-                    Creación de usuarios para la plataforma.
+                    Edicion de usuarios para la plataforma.
                 </DialogDescription>
             </DialogHeader>
             <Form {...formCreate}>

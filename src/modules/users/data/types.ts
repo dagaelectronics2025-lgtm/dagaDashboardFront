@@ -4,3 +4,27 @@ export enum EUserRoles {
     CASHIER = 'cashier',
     SELLER = 'seller'
 }
+
+// API
+
+export interface User {
+    id: string
+    name: string
+    email: string
+    username: string
+    role: EUserRoles
+    createdAt: string
+}
+
+export interface CreateUserDto {
+    name: string
+    email: string
+    password: string
+    username: string
+    role: EUserRoles
+}
+
+export interface UpdateUserDto {
+    name?: string
+    email?: string
+}

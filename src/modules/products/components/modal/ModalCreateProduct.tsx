@@ -11,46 +11,35 @@ import {
 import {Button} from "@/shared/components/button.tsx";
 import {Input} from "@/shared/components/input.tsx";
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/shared/components/select.tsx";
-import {useUserController} from "@/modules/users/hooks/useUserController.tsx";
+import {EProductRoles} from "@/modules/products/data/types.ts";
+import {useProductController} from "@/modules/products/hooks/useProductController.tsx";
 import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage} from "@/shared/components/form.tsx";
-import {userRolesOptions} from "@/modules/users/data/utils.ts";
 
+export const productRolesOptions = [
+    {value: EProductRoles.ADMIN, label: 'Administrador'},
+    {value: EProductRoles.MANAGER, label: 'Gerente'},
+    {value: EProductRoles.CASHIER, label: 'Cajero'},
+    {value: EProductRoles.SELLER, label: 'Vendedor'}
+];
 
-export const ModalCreateUser = () => {
+export const ModalCreateProduct = () => {
 
-    const {formCreate, showDialogCreate, setShowDialogCreate, onCreate} = useUserController()
+    const {formCreate, onCreate} = useProductController()
 
-    return (<Dialog open={showDialogCreate} onOpenChange={setShowDialogCreate}>
+    return (<Dialog>
         <DialogTrigger asChild>
-            <Button variant="outline">Crear Usuario</Button>
+            <Button variant="outline">Crear Producto</Button>
         </DialogTrigger>
         <DialogContent className="sm:max-w-[425px] bg-white">
             <DialogHeader>
-                <DialogTitle>Crear Usuario</DialogTitle>
+                <DialogTitle>Crear Producto</DialogTitle>
                 <DialogDescription>
-                    Creación de usuarios para la plataforma.
+                    Creación de productos para la plataforma.
                 </DialogDescription>
             </DialogHeader>
             <Form {...formCreate}>
                 <form onSubmit={formCreate.handleSubmit(onCreate)}>
                     <div className="grid gap-4 mb-4">
-                        <div className="grid gap-3">
-                            <FormField
-                                control={formCreate.control}
-                                name="name"
-                                render={({field}) => (
-                                    <FormItem>
-                                        <FormLabel>Nombre</FormLabel>
-                                        <FormControl>
-                                            <Input placeholder="Jhon Doe" {...field}
-                                                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-                                            />
-                                        </FormControl>
-                                        <FormMessage className="text-red-500"/>
-                                    </FormItem>
-                                )}
-                            />
-                        </div>
                         <div className="grid gap-3">
                             <FormField
                                 control={formCreate.control}
@@ -105,10 +94,10 @@ export const ModalCreateUser = () => {
                         <div className="grid gap-3">
                             <FormField
                                 control={formCreate.control}
-                                name="username"
+                                name="productname"
                                 render={({field}) => (
                                     <FormItem>
-                                        <FormLabel>Nombre de Usuario</FormLabel>
+                                        <FormLabel>Nombre de Producto</FormLabel>
                                         <FormControl>
                                             <Input placeholder="DagaCaja" {...field}
                                                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
@@ -123,12 +112,9 @@ export const ModalCreateUser = () => {
                             <FormField control={formCreate.control} name="role" render={
                                 ({field}) => (
                                     <FormItem>
-                                        <FormLabel>Rol de Usuario</FormLabel>
+                                        <FormLabel>Rol de Producto</FormLabel>
                                         <FormControl>
-                                            <Select
-                                                onValueChange={field.onChange}
-                                                defaultValue={field.value}
-                                                value={field.value}>
+                                            <Select {...field}>
                                                 <SelectTrigger
                                                     className="w-full px-4 py-3 border border-gray-300 rounded-lg">
                                                     <SelectValue placeholder="Selecciona un rol"
@@ -136,7 +122,7 @@ export const ModalCreateUser = () => {
                                                 </SelectTrigger>
                                                 <SelectContent
                                                     className="px-4 py-3 border bg-white border-gray-300 rounded-lg">
-                                                    {userRolesOptions.map(option => (
+                                                    {productRolesOptions.map(option => (
                                                         <SelectItem key={option.value} value={option.value}>
                                                             {option.label}
                                                         </SelectItem>
@@ -152,9 +138,9 @@ export const ModalCreateUser = () => {
                     </div>
                     <DialogFooter>
                         <DialogClose asChild>
-                            <Button variant="default" onClick={() => formCreate.reset()}>Cancelar</Button>
+                            <Button variant="default">Cancelar</Button>
                         </DialogClose>
-                        <Button variant="outline" type="submit">Crear Usuario</Button>
+                        <Button variant="outline" type="submit">Crear Producto</Button>
                     </DialogFooter>
                 </form>
             </Form>
