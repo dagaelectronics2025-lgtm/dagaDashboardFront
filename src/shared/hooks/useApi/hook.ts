@@ -23,8 +23,10 @@ const httpClient = async <TResponse>(
         headers['Authorization'] = `Bearer ${accessToken}`;
     }
 
+    // CAMBIAR PARA QUE DEPENDA DEL ENTORNO
     const config: RequestInit = {
         ...options,
+        referrer: "no-referrer-when-downgrade",
         headers,
     };
 
