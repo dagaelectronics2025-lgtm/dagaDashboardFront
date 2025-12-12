@@ -25,16 +25,22 @@ export const Products = () => {
                                 <thead className="bg-stone-50">
                                 <tr>
                                     <th className="px-6 py-3 text-left text-xs font-normal text-stone-500 uppercase tracking-wider">
-                                        USUARIOS
+                                        NOMBRE
                                     </th>
                                     <th className="px-6 py-3 text-left text-xs font-normal text-stone-500 uppercase tracking-wider">
-                                        TIPO DE USUARIO
+                                        DESCRIPCION
                                     </th>
                                     <th className="px-6 py-3 text-left text-xs font-normal text-stone-500 uppercase tracking-wider">
-                                        ESTADO
+                                        CATEGORIA
                                     </th>
                                     <th className="px-6 py-3 text-left text-xs font-normal text-stone-500 uppercase tracking-wider">
-                                        UBICACIÓN
+                                        PRECIO DETAL
+                                    </th>
+                                    <th className="px-6 py-3 text-left text-xs font-normal text-stone-500 uppercase tracking-wider">
+                                        PRECIO MAYORISTA
+                                    </th>
+                                    <th className="px-6 py-3 text-left text-xs font-normal text-stone-500 uppercase tracking-wider">
+                                        STOCK
                                     </th>
                                     <th className="px-6 py-3 text-left text-xs font-normal text-stone-500 uppercase tracking-wider">
                                         ACCIONES

@@ -1,5 +1,5 @@
 import {type QueryOptions, useApi} from "@/shared/hooks/useApi";
-import type {CreateProductDto, UpdateProductDto, Product} from "@/modules/products/data/types.ts";
+import type {CreateProductDto, Product, UpdateProductDto} from "@/modules/products/data/types.ts";
 
 export const useProductsApi = () => {
     const {useGet, usePost, usePut, useDelete} = useApi()
@@ -7,16 +7,16 @@ export const useProductsApi = () => {
     const useGetProducts = (options?: QueryOptions) =>
         useGet<Product[]>('/products', options)
 
-    const useGetProduct = (productId: number, options?: QueryOptions) =>
+    const useGetProduct = (productId: string, options?: QueryOptions) =>
         useGet<Product>(`/products/${productId}`, options)
 
     const useCreateProduct = () =>
         usePost<Product, CreateProductDto>('/products')
 
-    const useUpdateProduct = (productId: number) =>
+    const useUpdateProduct = (productId: string) =>
         usePut<Product, UpdateProductDto>(`/products/${productId}`)
 
-    const useDeleteProduct = (productId: number) =>
+    const useDeleteProduct = (productId: string) =>
         useDelete<void>(`/products/${productId}`)
 
     return {

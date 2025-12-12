@@ -1,28 +1,26 @@
-export enum EProductRoles {
-    ADMIN = 'admin',
-    MANAGER = 'manager',
-    CASHIER = 'cashier',
-    SELLER = 'seller'
-}
-
 // API
 
 export interface Product {
     id: string
-    email: string
-    productname: string
-    role: EProductRoles
-    createdAt: string
+    name: string
+    description: string
+    price: number
+    priceAlt: number
+    stock: number
 }
 
 export interface CreateProductDto {
-    email: string
-    password: string
-    productname: string
-    role: EProductRoles
+    name: string
+    description: string
+    price: number
+    priceAlt: number
+    stock: number
 }
 
 export interface UpdateProductDto {
-    name?: string
-    email?: string
+    name: string
+    description: string
+    price: number
+    priceAlt: number
+    stock: number
 }

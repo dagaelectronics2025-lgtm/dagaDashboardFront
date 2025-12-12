@@ -10,21 +10,15 @@ import {
 } from "@/shared/components/dialog.tsx";
 import {Button} from "@/shared/components/button.tsx";
 import {Input} from "@/shared/components/input.tsx";
-import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/shared/components/select.tsx";
-import {EProductRoles} from "@/modules/products/data/types.ts";
 import {useProductController} from "@/modules/products/hooks/useProductController.tsx";
 import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage} from "@/shared/components/form.tsx";
-
-export const productRolesOptions = [
-    {value: EProductRoles.ADMIN, label: 'Administrador'},
-    {value: EProductRoles.MANAGER, label: 'Gerente'},
-    {value: EProductRoles.CASHIER, label: 'Cajero'},
-    {value: EProductRoles.SELLER, label: 'Vendedor'}
-];
+import {Textarea} from "@/shared/components/textarea.tsx";
+import {useUtils} from "@/shared/hooks/useUtils";
 
 export const ModalCreateProduct = () => {
 
     const {formCreate, onCreate} = useProductController()
+    const {formatAmountFromCents, parseAmountToCents} = useUtils()
 
     return (<Dialog>
         <DialogTrigger asChild>
@@ -43,12 +37,12 @@ export const ModalCreateProduct = () => {
                         <div className="grid gap-3">
                             <FormField
                                 control={formCreate.control}
-                                name="email"
+                                name="name"
                                 render={({field}) => (
                                     <FormItem>
-                                        <FormLabel>Correo Electrónico</FormLabel>
+                                        <FormLabel>Nombre del Producto</FormLabel>
                                         <FormControl>
-                                            <Input placeholder="correo@electronico.com" {...field}
+                                            <Input placeholder="Producto1" {...field}
                                                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
                                             />
                                         </FormControl>
@@ -60,13 +54,13 @@ export const ModalCreateProduct = () => {
                         <div className="grid gap-3">
                             <FormField
                                 control={formCreate.control}
-                                name="password"
+                                name="description"
                                 render={({field}) => (
                                     <FormItem>
-                                        <FormLabel>Contraseña</FormLabel>
+                                        <FormLabel>Descripción</FormLabel>
                                         <FormControl>
-                                            <Input placeholder="123456" {...field}
-                                                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                                            <Textarea placeholder="Descripción del producto" {...field}
+                                                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
                                             />
                                         </FormControl>
                                         <FormMessage className="text-red-500"/>
@@ -77,13 +71,20 @@ export const ModalCreateProduct = () => {
                         <div className="grid gap-3">
                             <FormField
                                 control={formCreate.control}
-                                name="confirmPassword"
+                                name="price"
                                 render={({field}) => (
                                     <FormItem>
-                                        <FormLabel>Confirmar Contraseña</FormLabel>
+                                        <FormLabel>Precio</FormLabel>
                                         <FormControl>
-                                            <Input placeholder="123456" {...field}
-                                                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                                            <Input
+                                                placeholder="200.00"
+                                                value={formatAmountFromCents(field.value)}
+                                                onChange={(e) => {
+                                                    const cents = parseAmountToCents(e.target.value)
+                                                    field.onChange(cents)
+                                                }}
+                                                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                                                inputMode="decimal"
                                             />
                                         </FormControl>
                                         <FormMessage className="text-red-500"/>
@@ -94,13 +95,20 @@ export const ModalCreateProduct = () => {
                         <div className="grid gap-3">
                             <FormField
                                 control={formCreate.control}
-                                name="productname"
+                                name="priceAlt"
                                 render={({field}) => (
                                     <FormItem>
-                                        <FormLabel>Nombre de Producto</FormLabel>
+                                        <FormLabel>Precio al Mayor</FormLabel>
                                         <FormControl>
-                                            <Input placeholder="DagaCaja" {...field}
-                                                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                                            <Input
+                                                placeholder="150.00"
+                                                value={formatAmountFromCents(field.value)}
+                                                onChange={(e) => {
+                                                    const cents = parseAmountToCents(e.target.value)
+                                                    field.onChange(cents)
+                                                }}
+                                                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                                                inputMode="decimal"
                                             />
                                         </FormControl>
                                         <FormMessage className="text-red-500"/>
@@ -109,31 +117,22 @@ export const ModalCreateProduct = () => {
                             />
                         </div>
                         <div className="grid gap-3">
-                            <FormField control={formCreate.control} name="role" render={
-                                ({field}) => (
+                            <FormField
+                                control={formCreate.control}
+                                name="stock"
+                                render={({field}) => (
                                     <FormItem>
-                                        <FormLabel>Rol de Producto</FormLabel>
+                                        <FormLabel>Cantidad</FormLabel>
                                         <FormControl>
-                                            <Select {...field}>
-                                                <SelectTrigger
-                                                    className="w-full px-4 py-3 border border-gray-300 rounded-lg">
-                                                    <SelectValue placeholder="Selecciona un rol"
-                                                                 className="w-full px-4 py-3 border border-gray-300 rounded-lg"/>
-                                                </SelectTrigger>
-                                                <SelectContent
-                                                    className="px-4 py-3 border bg-white border-gray-300 rounded-lg">
-                                                    {productRolesOptions.map(option => (
-                                                        <SelectItem key={option.value} value={option.value}>
-                                                            {option.label}
-                                                        </SelectItem>
-                                                    ))}
-                                                </SelectContent>
-                                            </Select>
+                                            <Input placeholder="10" {...field}
+                                                   type="number"
+                                                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                                            />
                                         </FormControl>
                                         <FormMessage className="text-red-500"/>
                                     </FormItem>
-                                )
-                            }/>
+                                )}
+                            />
                         </div>
                     </div>
                     <DialogFooter>
