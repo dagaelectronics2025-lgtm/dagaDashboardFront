@@ -1,21 +1,22 @@
 import {z} from "zod";
-import {EProductRoles} from "@/modules/products/data/types.ts";
 
 export const createSchema = z.object({
-    email: z.email({pattern: z.regexes.email, message: "Introduzca un email válido"}),
-    password: z.string().min(8, {
-        message: "Contraseña debe contener minimo 8 caracteres.",
+    name: z.string().min(3, {
+        message: "El nombre del producto debe contener al menos 3 caracteres.",
     }),
-    confirmPassword: z.string().min(8, {
-        message: "Confrimacion de contraseña debe contener minimo 8 caracteres.",
+    description: z.string().min(10, {
+        message: "La descripción del producto debe contener al menos 10 caracteres.",
     }),
-    productname: z.string().min(3, {
-        message: "Nombre de producto debe contener minimo 3 caracteres.",
+    priceMajor: z.number().positive({
+        message: "El precio mayorista del producto debe ser un número positivo.",
     }),
-    role: z.enum(EProductRoles, {
-        message: 'Rol de producto es requerido'
-    })
-}).refine(data => data.password === data.confirmPassword, {
-    message: "Contraseña y Confirmacion deben ser iguales",
-    path: ["confirmPassword"]
+    priceMinor: z.number().positive({
+        message: "El precio minorista del producto debe ser un número positivo.",
+    }),
+    category: z.string().min(3, {
+        message: "La categoría del producto debe contener al menos 3 caracteres.",
+    }),
+    stock: z.number().int().nonnegative({
+        message: "El stock del producto debe ser un número entero no negativo.",
+    }),
 })
