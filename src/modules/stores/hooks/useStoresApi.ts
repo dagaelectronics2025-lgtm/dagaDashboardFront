@@ -7,16 +7,16 @@ export const useStoresApi = () => {
     const useGetStores = (options?: QueryOptions) =>
         useGet<Store[]>('/stores', options)
 
-    const useGetStore = (storeId: number, options?: QueryOptions) =>
+    const useGetStore = (storeId: string, options?: QueryOptions) =>
         useGet<Store>(`/stores/${storeId}`, options)
 
     const useCreateStore = () =>
         usePost<Store, CreateStoreDto>('/stores')
 
-    const useUpdateStore = (storeId: number) =>
+    const useUpdateStore = (storeId: string) =>
         usePut<Store, UpdateStoreDto>(`/stores/${storeId}`)
 
-    const useDeleteStore = (storeId: number) =>
+    const useDeleteStore = (storeId: string) =>
         useDelete<void>(`/stores/${storeId}`)
 
     return {

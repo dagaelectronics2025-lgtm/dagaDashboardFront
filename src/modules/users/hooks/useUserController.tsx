@@ -50,6 +50,7 @@ export const useUserController = () => {
         }
     })
 
+    // METHODS
     const onCreate = (values: z.infer<typeof createSchema>) => {
         const {confirmPassword, ...restValues} = values
         create(
