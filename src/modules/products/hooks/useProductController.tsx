@@ -6,6 +6,7 @@ import {useState} from "react";
 import {toast} from "sonner";
 import type {Product} from "@/modules/products/data/types.ts";
 import {useProductsApi} from "@/modules/products/hooks/useProductsApi.ts";
+import {generateHashCode} from "@/modules/products/functions/generateHash.ts";
 
 export const useProductController = () => {
 
@@ -31,20 +32,24 @@ export const useProductController = () => {
         defaultValues: {
             name: "",
             description: "",
+            category: "",
             price: 0,
             priceAlt: 0,
             stock: 0,
+            code: generateHashCode()
         }
     })
 
     const formEdit = useForm<z.infer<typeof createSchema>>({
         resolver: zodResolver(createSchema),
         defaultValues: {
-            name: selectedProduct?.name || "",
-            description: selectedProduct?.description || "",
-            price: selectedProduct?.price || 0,
-            priceAlt: selectedProduct?.priceAlt || 0,
-            stock: selectedProduct?.stock || 0,
+            name: "",
+            description: "",
+            category: "",
+            price: 0,
+            priceAlt: 0,
+            stock: 0,
+            code: ""
         }
     })
 

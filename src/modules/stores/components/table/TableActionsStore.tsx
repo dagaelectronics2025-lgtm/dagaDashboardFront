@@ -8,8 +8,14 @@ import {
 } from "@/shared/components/dropdown-menu.tsx";
 import {Button} from "@/shared/components/button.tsx";
 import {EllipsisVertical} from "lucide-react";
+import {ModalEditStore} from "@/modules/stores/components/modal/ModalEditStore.tsx";
+import type {Store} from "@/modules/stores/data/types.ts";
 
-export const TableActionsStore = () => {
+interface TableActionsStoreProps {
+    store: Store
+}
+
+export const TableActionsStore = ({store}: TableActionsStoreProps) => {
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -20,13 +26,13 @@ export const TableActionsStore = () => {
             <DropdownMenuContent className="bg-white w-56">
                 <DropdownMenuLabel>Acciones</DropdownMenuLabel>
                 <DropdownMenuSeparator className=""/>
-                <DropdownMenuItem
-                    onClick={() => console.log("EDITAR")}
-                >
-                    Editar
+                <DropdownMenuItem asChild>
+                    <div className="w-full cursor-pointer">
+                        <ModalEditStore store={store}/>
+                    </div>
                 </DropdownMenuItem>
                 <DropdownMenuItem
-                    onClick={() => console.log("ELIMINAR")}
+                    onClick={() => console.log("ELIMINAR", store.id)}
                 >
                     Eliminar
                 </DropdownMenuItem>
