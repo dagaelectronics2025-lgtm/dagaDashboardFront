@@ -10,33 +10,59 @@ import {
 } from "@/shared/components/dialog.tsx";
 import {Button} from "@/shared/components/button.tsx";
 import {Input} from "@/shared/components/input.tsx";
-import {useProductController} from "@/modules/products/hooks/useProductController.tsx";
 import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage} from "@/shared/components/form.tsx";
 import {Textarea} from "@/shared/components/textarea.tsx";
+import {useProductController} from "@/modules/products/hooks/useProductController.tsx";
+import type {Product} from "@/modules/products/data/types.ts";
+import {PencilIcon} from "lucide-react";
 import {useUtils} from "@/shared/hooks/useUtils";
 
-export const ModalCreateProduct = () => {
+interface ModalEditProductProps {
+    product: Product
+}
 
-    const {formCreate, onCreate} = useProductController()
+export const ModalEditProduct = ({product}: ModalEditProductProps) => {
+
+    const {formEdit, showDialogEdit, setShowDialogEdit, setSelectedProduct, onUpdate} = useProductController()
     const {formatAmountFromCents, parseAmountToCents} = useUtils()
 
-    return (<Dialog>
-        <DialogTrigger asChild>
-            <Button variant="outline">Crear Producto</Button>
+    const setFormValues = (product: Product) => {
+        formEdit.setValue("name", product.name)
+        formEdit.setValue("description", product.description)
+        formEdit.setValue("category", product.category)
+        formEdit.setValue("price", product.price)
+        formEdit.setValue("priceAlt", product.priceAlt)
+        formEdit.setValue("stock", product.stock)
+        formEdit.setValue("code", product.code)
+    }
+
+    const onOpenChange = (open: boolean) => {
+        setShowDialogEdit(open)
+        if (open) {
+            setSelectedProduct(product)
+            setFormValues(product)
+        }
+    }
+
+    return (<Dialog open={showDialogEdit} onOpenChange={onOpenChange}>
+        <DialogTrigger>
+            <Button variant="ghost" size="icon">
+                <PencilIcon className="h-5 w-5"/>
+            </Button>
         </DialogTrigger>
         <DialogContent className="sm:max-w-[425px] bg-white">
             <DialogHeader>
-                <DialogTitle>Crear Producto</DialogTitle>
+                <DialogTitle>Editar Producto</DialogTitle>
                 <DialogDescription>
-                    Creación de productos para la plataforma.
+                    Edición de productos para la plataforma.
                 </DialogDescription>
             </DialogHeader>
-            <Form {...formCreate}>
-                <form onSubmit={formCreate.handleSubmit(onCreate)}>
+            <Form {...formEdit}>
+                <form onSubmit={formEdit.handleSubmit(onUpdate)}>
                     <div className="grid gap-4 mb-4">
                         <div className="grid gap-3">
                             <FormField
-                                control={formCreate.control}
+                                control={formEdit.control}
                                 name="name"
                                 render={({field}) => (
                                     <FormItem>
@@ -53,7 +79,7 @@ export const ModalCreateProduct = () => {
                         </div>
                         <div className="grid gap-3">
                             <FormField
-                                control={formCreate.control}
+                                control={formEdit.control}
                                 name="description"
                                 render={({field}) => (
                                     <FormItem>
@@ -70,7 +96,7 @@ export const ModalCreateProduct = () => {
                         </div>
                         <div className="grid gap-3">
                             <FormField
-                                control={formCreate.control}
+                                control={formEdit.control}
                                 name="category"
                                 render={({field}) => (
                                     <FormItem>
@@ -87,7 +113,7 @@ export const ModalCreateProduct = () => {
                         </div>
                         <div className="grid gap-3">
                             <FormField
-                                control={formCreate.control}
+                                control={formEdit.control}
                                 name="price"
                                 render={({field}) => (
                                     <FormItem>
@@ -111,7 +137,7 @@ export const ModalCreateProduct = () => {
                         </div>
                         <div className="grid gap-3">
                             <FormField
-                                control={formCreate.control}
+                                control={formEdit.control}
                                 name="priceAlt"
                                 render={({field}) => (
                                     <FormItem>
@@ -135,7 +161,7 @@ export const ModalCreateProduct = () => {
                         </div>
                         <div className="grid gap-3">
                             <FormField
-                                control={formCreate.control}
+                                control={formEdit.control}
                                 name="stock"
                                 render={({field}) => (
                                     <FormItem>
@@ -153,14 +179,18 @@ export const ModalCreateProduct = () => {
                         </div>
                         <div className="grid gap-3">
                             <FormField
-                                control={formCreate.control}
+                                control={formEdit.control}
                                 name="code"
                                 render={({field}) => (
                                     <FormItem>
                                         <FormLabel>Código del Producto</FormLabel>
                                         <FormControl>
-                                            <Input placeholder="1234ABCD" {...field}
-                                                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                                            <Input
+                                                placeholder="1234ABCD"
+                                                {...field}
+                                                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 bg-gray-100 cursor-not-allowed"
+                                                readOnly
+                                                disabled
                                             />
                                         </FormControl>
                                         <FormMessage className="text-red-500"/>
@@ -171,9 +201,9 @@ export const ModalCreateProduct = () => {
                     </div>
                     <DialogFooter>
                         <DialogClose asChild>
-                            <Button variant="default">Cancelar</Button>
+                            <Button variant="default" onClick={() => formEdit.reset()}>Cancelar</Button>
                         </DialogClose>
-                        <Button variant="outline" type="submit">Crear Producto</Button>
+                        <Button variant="outline" type="submit">Editar Producto</Button>
                     </DialogFooter>
                 </form>
             </Form>

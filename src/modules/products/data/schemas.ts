@@ -19,4 +19,7 @@ export const createSchema = z.object({
     stock: z.number().int().nonnegative({
         message: "El stock del producto debe ser un número entero no negativo.",
     }),
+    code: z.string().min(8, {
+        message: "El código del producto debe contener al menos 8 caracteres.",
+    })
 })
