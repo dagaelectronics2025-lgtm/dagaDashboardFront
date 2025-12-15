@@ -11,6 +11,14 @@ export interface Product {
     code: string
 }
 
+export interface ProductCart {
+    id: string
+    name: string
+    price: number
+    priceAlt: number
+    quantity: number
+}
+
 export interface CreateProductDto {
     name: string
     description: string
