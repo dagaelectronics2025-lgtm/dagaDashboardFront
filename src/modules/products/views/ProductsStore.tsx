@@ -1,9 +1,6 @@
 import {Card, CardAction, CardContent, CardHeader, CardTitle} from "@/shared/components/card.tsx";
-import {TableActionsProduct} from "@/modules/products/components/table/TableActionsProduct.tsx";
 import {ModalCreateProduct} from "@/modules/products/components/modal/ModalCreateProduct.tsx";
-import {useProductController} from "@/modules/products/hooks/useProductController.tsx";
 import {useUtils} from "@/shared/hooks/useUtils";
-import {useMemo, useState} from "react";
 import {
     Pagination,
     PaginationContent,
@@ -12,38 +9,43 @@ import {
     PaginationNext,
     PaginationPrevious
 } from "@/shared/components/pagination";
+import {TableSearchProduct} from "@/modules/products/components/table/TableSearchProduct";
+import {Checkbox} from "@/shared/components/checkbox";
+import {useProductStoreController} from "@/modules/products/hooks/useProductStoreController";
+import {CartBottomSheet} from "@/modules/products/components/cart/CartBottomSheet.tsx";
 
-export const Products = () => {
-    const {products} = useProductController();
+export const ProductsStore = () => {
     const {formatAmountFromCents} = useUtils();
-
-    const [page, setPage] = useState(1);
-    const [pageSize] = useState(10);
-
-    const totalItems = products?.length ?? 0;
-    const totalPages = Math.max(1, Math.ceil(totalItems / pageSize));
-
-    const paginatedProducts = useMemo(() => {
-        if (!products) return [];
-        const start = (page - 1) * pageSize;
-        const end = start + pageSize;
-        return products.slice(start, end);
-    }, [products, page, pageSize]);
-
-    const onPrevPage = () => setPage((prev) => Math.max(1, prev - 1));
-    const onNextPage = () => setPage((prev) => Math.min(totalPages, prev + 1));
-    const onPageChange = (newPage: number) => setPage(newPage);
+    const {
+        search,
+        page,
+        totalItems,
+        totalPages,
+        paginatedProducts,
+        isInCart,
+        handleToggleCart,
+        setSearch,
+        setPage,
+        onPrevPage,
+        onNextPage,
+        onPageChange,
+    } = useProductStoreController();
 
     return (
         <div className="h-full overflow-y-auto p-6 custom-scrollbar">
             <div className="space-y-6">
-                {/* Authors Table */}
                 <Card className="border-stone-200">
-                    <CardHeader className="border-b border-stone-200">
-                        <CardTitle className="text-lg font-semibold text-stone-900">Tabla de Productos</CardTitle>
-                        <CardAction>
-                            <ModalCreateProduct/>
-                        </CardAction>
+                    <CardHeader className="border-b border-stone-200 flex items-center justify-between gap-4">
+                        <CardTitle className="text-lg font-semibold text-stone-900">Productos</CardTitle>
+                        <div className="flex items-center gap-3">
+                            <TableSearchProduct value={search} onChange={(value) => {
+                                setPage(1);
+                                setSearch(value);
+                            }}/>
+                            <CardAction>
+                                <ModalCreateProduct/>
+                            </CardAction>
+                        </div>
                     </CardHeader>
 
                     <CardContent className="p-0">
@@ -52,10 +54,10 @@ export const Products = () => {
                                 <thead className="bg-stone-50">
                                 <tr>
                                     <th className="px-6 py-3 text-left text-xs font-normal text-stone-500 uppercase tracking-wider">
-                                        NOMBRE
+                                        CODE
                                     </th>
                                     <th className="px-6 py-3 text-left text-xs font-normal text-stone-500 uppercase tracking-wider">
-                                        DESCRIPCIÓN
+                                        NOMBRE
                                     </th>
                                     <th className="px-6 py-3 text-left text-xs font-normal text-stone-500 uppercase tracking-wider">
                                         CATEGORÍA
@@ -70,7 +72,7 @@ export const Products = () => {
                                         STOCK
                                     </th>
                                     <th className="px-6 py-3 text-left text-xs font-normal text-stone-500 uppercase tracking-wider">
-                                        ACCIONES
+                                        SELECCIONAR
                                     </th>
                                 </tr>
                                 </thead>
@@ -78,10 +80,10 @@ export const Products = () => {
                                 {paginatedProducts.map((product) => (
                                     <tr key={product.id} className="hover:bg-stone-50">
                                         <td className="px-6 py-4 whitespace-nowrap text-sm text-stone-900">
-                                            {product.name}
+                                            {product.code}
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap text-sm text-stone-500 max-w-xs truncate">
-                                            {product.description}
+                                            {product.name}
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap text-sm text-stone-500">
                                             {product.category}
@@ -96,7 +98,13 @@ export const Products = () => {
                                             {product.stock}
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap text-sm font-normal">
-                                            <TableActionsProduct product={product}/>
+                                            <Checkbox
+                                                checked={isInCart(product.id)}
+                                                onCheckedChange={(checked) =>
+                                                    handleToggleCart(product.id, Boolean(checked))
+                                                }
+                                                aria-label={`Seleccionar producto ${product.name}`}
+                                            />
                                         </td>
                                     </tr>
                                 ))}
@@ -169,5 +177,6 @@ export const Products = () => {
                 </Card>
 
             </div>
+            <CartBottomSheet/>
         </div>)
 }

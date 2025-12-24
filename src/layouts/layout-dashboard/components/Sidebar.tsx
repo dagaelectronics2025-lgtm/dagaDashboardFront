@@ -1,5 +1,5 @@
 import {NavLink, useLocation} from "react-router-dom";
-import {LayoutDashboard, LogOut, ShoppingBag, Store, User, X} from "lucide-react";
+import {ArchiveRestore, LayoutDashboard, LogOut, ShoppingBag, ShoppingCart, Store, User, X} from "lucide-react";
 import {Button} from "@/shared/components/button.tsx";
 import {cn} from "@/shared/lib/utils.ts";
 import {Separator} from "@/shared/components/separator.tsx";
@@ -25,6 +25,16 @@ const navItems = [
         title: "Productos",
         href: "/products",
         icon: ShoppingBag,
+    },
+    {
+        title: "Productos Tienda",
+        href: "/products-store",
+        icon: ShoppingCart,
+    },
+    {
+        title: "Ordenes",
+        href: "/orders",
+        icon: ArchiveRestore,
     },
     // {
     //     title: "Tables",
