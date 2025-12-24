@@ -8,6 +8,7 @@ import {Stores} from "@/modules/stores/views/Stores.tsx";
 import {useAuthStore} from "@/shared/stores/authStore.ts";
 import type {ReactElement} from "react";
 import {ProductsStore} from "@/modules/products/views/ProductsStore.tsx";
+import {Orders} from "@/modules/orders/views/Orders.tsx";
 
 const ProtectedRoute = ({children}: { children: ReactElement }) => {
     const {isAuthenticated} = useAuthStore();
@@ -68,6 +69,16 @@ export const AppRouter = () => (
                 <ProtectedRoute>
                     <LayoutDashboard>
                         <ProductsStore/>
+                    </LayoutDashboard>
+                </ProtectedRoute>
+            }
+        />
+        <Route
+            path="/orders"
+            element={
+                <ProtectedRoute>
+                    <LayoutDashboard>
+                        <Orders/>
                     </LayoutDashboard>
                 </ProtectedRoute>
             }
