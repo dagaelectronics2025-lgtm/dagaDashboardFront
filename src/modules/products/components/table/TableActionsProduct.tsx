@@ -7,15 +7,17 @@ import {
     DropdownMenuTrigger
 } from "@/shared/components/dropdown-menu.tsx";
 import {Button} from "@/shared/components/button.tsx";
-import {EllipsisVertical} from "lucide-react";
-import {ModalEditProduct} from "@/modules/products/components/modal/ModalEditProduct.tsx";
+import {EllipsisVertical, PencilIcon, Trash2} from "lucide-react";
 import type {Product} from "@/modules/products/data/types.ts";
 
 interface TableActionsProductProps {
     product: Product
+    onEdit: (product: Product) => void
+    onDelete: (product: Product) => void | Promise<void>
 }
 
-export const TableActionsProduct = ({product}: TableActionsProductProps) => {
+export const TableActionsProduct = ({product, onEdit, onDelete}: TableActionsProductProps) => {
+
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -26,15 +28,23 @@ export const TableActionsProduct = ({product}: TableActionsProductProps) => {
             <DropdownMenuContent className="bg-white w-56">
                 <DropdownMenuLabel>Acciones</DropdownMenuLabel>
                 <DropdownMenuSeparator className=""/>
-                <DropdownMenuItem asChild>
-                    <div className="w-full cursor-pointer">
-                        <ModalEditProduct product={product}/>
+                <DropdownMenuItem onSelect={(e) => {
+                    e.preventDefault()
+                    onEdit(product)
+                }}>
+                    <div className="flex items-center gap-2">
+                        <PencilIcon className="h-4 w-4"/>
+                        <span>Editar</span>
                     </div>
                 </DropdownMenuItem>
-                <DropdownMenuItem
-                    onClick={() => console.log("ELIMINAR", product.id)}
-                >
-                    Eliminar
+                <DropdownMenuItem onSelect={(e) => {
+                    e.preventDefault()
+                    void onDelete(product)
+                }}>
+                    <div className="flex items-center gap-2 text-red-600">
+                        <Trash2 className="h-4 w-4"/>
+                        <span>Eliminar</span>
+                    </div>
                 </DropdownMenuItem>
             </DropdownMenuContent>
         </DropdownMenu>

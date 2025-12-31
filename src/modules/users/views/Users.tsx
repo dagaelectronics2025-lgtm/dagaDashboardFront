@@ -11,7 +11,7 @@ export const Users = () => {
 
     const {canManageUsers, can} = usePermissions()
 
-    const {users} = useUserController()
+    const {users, deleteUserById} = useUserController()
 
     return (
         <div className="h-full overflow-y-auto p-6 custom-scrollbar">
@@ -86,7 +86,8 @@ export const Users = () => {
                                         </td>
                                         {canManageUsers() &&
                                             <td className="px-6 py-4 whitespace-nowrap text-sm font-normal">
-                                                <TableActionsUser user={user as unknown as User}/>
+                                                <TableActionsUser user={user as unknown as User}
+                                                                  onDelete={deleteUserById}/>
                                             </td>}
                                     </tr>
                                 ))}

@@ -53,6 +53,22 @@ export const useProductController = () => {
         }
     })
 
+    const setFormValuesForEdit = (product: Product) => {
+        formEdit.setValue("name", product.name)
+        formEdit.setValue("description", product.description)
+        formEdit.setValue("category", product.category)
+        formEdit.setValue("price", product.price)
+        formEdit.setValue("priceAlt", product.priceAlt)
+        formEdit.setValue("stock", product.stock)
+        formEdit.setValue("code", product.code)
+    }
+
+    const openEditProduct = (product: Product) => {
+        setSelectedProduct(product)
+        setFormValuesForEdit(product)
+        setShowDialogEdit(true)
+    }
+
     // METHODS
     const onCreate = (values: z.infer<typeof createSchema>) => {
         create(
@@ -91,6 +107,19 @@ export const useProductController = () => {
         })
     }
 
+    const deleteProductById = async (product: Product) => {
+        const ok = window.confirm(`¿Eliminar el producto "${product.name}"?`)
+        if (!ok) return
+
+        setSelectedProduct(product)
+        await deleteProduct(undefined, {
+            onSuccess: async () => {
+                toast.success("Producto eliminado exitosamente", {className: "success"})
+                await refetchProducts()
+            }
+        })
+    }
+
     return {
         // DATA
         products,
@@ -103,6 +132,8 @@ export const useProductController = () => {
         onCreate,
         onUpdate,
         onDelete,
+        openEditProduct,
+        deleteProductById,
         setShowDialogCreate,
         setShowDialogEdit,
         setSelectedProduct

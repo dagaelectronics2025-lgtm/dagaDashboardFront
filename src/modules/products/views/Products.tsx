@@ -12,9 +12,20 @@ import {
     PaginationNext,
     PaginationPrevious
 } from "@/shared/components/pagination";
+import {ModalEditProduct} from "@/modules/products/components/modal/ModalEditProduct.tsx";
 
 export const Products = () => {
-    const {products} = useProductController();
+    const {
+        products,
+        openEditProduct,
+        deleteProductById,
+        selectedProduct,
+        showDialogEdit,
+        setShowDialogEdit,
+        formEdit,
+        onUpdate
+    } = useProductController();
+
     const {formatAmountFromCents} = useUtils();
 
     const [page, setPage] = useState(1);
@@ -96,7 +107,8 @@ export const Products = () => {
                                             {product.stock}
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap text-sm font-normal">
-                                            <TableActionsProduct product={product}/>
+                                            <TableActionsProduct product={product} onEdit={openEditProduct}
+                                                                 onDelete={deleteProductById}/>
                                         </td>
                                     </tr>
                                 ))}
@@ -167,6 +179,14 @@ export const Products = () => {
                         )}
                     </CardContent>
                 </Card>
+
+                <ModalEditProduct
+                    open={showDialogEdit}
+                    onOpenChange={setShowDialogEdit}
+                    product={selectedProduct}
+                    formEdit={formEdit}
+                    onUpdate={onUpdate}
+                />
 
             </div>
         </div>)

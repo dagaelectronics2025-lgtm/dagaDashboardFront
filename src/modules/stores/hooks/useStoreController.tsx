@@ -46,6 +46,19 @@ export const useStoreController = () => {
         }
     })
 
+    const setFormValuesForEdit = (store: Store) => {
+        formEdit.setValue("name", store.name)
+        formEdit.setValue("phone", store.phone)
+        formEdit.setValue("address", store.address)
+        formEdit.setValue("location", store.location)
+    }
+
+    const openEditStore = (store: Store) => {
+        setSelectedStore(store)
+        setFormValuesForEdit(store)
+        setShowDialogEdit(true)
+    }
+
     // METHODS
     const onCreate = (values: z.infer<typeof createSchema>) => {
         create(
@@ -84,6 +97,19 @@ export const useStoreController = () => {
         })
     }
 
+    const deleteStoreById = async (store: Store) => {
+        const ok = window.confirm(`¿Eliminar la tienda "${store.name}"?`)
+        if (!ok) return
+
+        setSelectedStore(store)
+        await deleteStore(undefined, {
+            onSuccess: async () => {
+                toast.success("Tienda eliminada exitosamente", {className: "success"})
+                await refetchStores()
+            }
+        })
+    }
+
     return {
         // DATA
         stores,
@@ -96,6 +122,8 @@ export const useStoreController = () => {
         onCreate,
         onUpdate,
         onDelete,
+        openEditStore,
+        deleteStoreById,
         setShowDialogCreate,
         setShowDialogEdit,
         setSelectedStore

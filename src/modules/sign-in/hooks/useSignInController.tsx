@@ -11,7 +11,7 @@ export function useSignInController() {
 
     const navigate = useNavigate();
 
-    const {logIn, isAuthenticated, loadingSignIn} = useAuthController()
+    const {logIn, loadingSignIn} = useAuthController()
 
     const [authError, setAuthError] = useState<boolean>(false);
 
@@ -24,14 +24,14 @@ export function useSignInController() {
     })
 
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
-        console.log("SIGN IN VALUES >> ", values)
+        setAuthError(false)
 
-        await logIn(values.email, values.password)
+        const ok = await logIn(values.email, values.password)
 
-        if (isAuthenticated) {
-            console.log("DATA >> ", {isAuthenticated})
+        if (ok) {
             return navigate("/dashboard")
         }
+
         return setAuthError(true)
     }
 

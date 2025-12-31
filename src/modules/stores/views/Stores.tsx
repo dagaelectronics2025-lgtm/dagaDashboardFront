@@ -2,9 +2,19 @@ import {Card, CardAction, CardContent, CardHeader, CardTitle} from "@/shared/com
 import {TableActionsStore} from "@/modules/stores/components/table/TableActionsStore.tsx";
 import {ModalCreateStore} from "@/modules/stores/components/modal/ModalCreateStore.tsx";
 import {useStoreController} from "@/modules/stores/hooks/useStoreController.tsx";
+import {ModalEditStore} from "@/modules/stores/components/modal/ModalEditStore.tsx";
 
 export const Stores = () => {
-    const {stores} = useStoreController();
+    const {
+        stores,
+        openEditStore,
+        deleteStoreById,
+        selectedStore,
+        showDialogEdit,
+        setShowDialogEdit,
+        formEdit,
+        onUpdate
+    } = useStoreController();
 
     return (
         <div className="h-full overflow-y-auto p-6 custom-scrollbar">
@@ -56,7 +66,8 @@ export const Stores = () => {
                                             {store.location}
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap text-sm font-normal">
-                                            <TableActionsStore store={store}/>
+                                            <TableActionsStore store={store} onEdit={openEditStore}
+                                                               onDelete={deleteStoreById}/>
                                         </td>
                                     </tr>
                                 ))}
@@ -75,6 +86,14 @@ export const Stores = () => {
                         </div>
                     </CardContent>
                 </Card>
+
+                <ModalEditStore
+                    open={showDialogEdit}
+                    onOpenChange={setShowDialogEdit}
+                    store={selectedStore}
+                    formEdit={formEdit}
+                    onUpdate={onUpdate}
+                />
 
             </div>
         </div>)

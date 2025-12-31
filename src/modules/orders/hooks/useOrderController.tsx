@@ -67,6 +67,7 @@ export const useOrderController = () => {
     const formCreate = useForm<OrderFormValues>({
         resolver: zodResolver(orderSchema),
         defaultValues: {
+            code: "",
             customer: "",
             seller: "",
             total: 0,
@@ -77,6 +78,7 @@ export const useOrderController = () => {
     const formEdit = useForm<OrderFormValues>({
         resolver: zodResolver(orderSchema),
         defaultValues: {
+            code: "",
             customer: "",
             seller: "",
             total: 0,
@@ -97,7 +99,8 @@ export const useOrderController = () => {
     };
 
     const onUpdate = (values: OrderFormValues) => {
-        const {code, ...rest} = values as any; // keep behavior, but code isn't en el schema
+        // No permitimos cambiar el code, pero puede venir en el payload; lo ignoramos.
+        const {code: _code, ...rest} = values;
         update(rest, {
             onSuccess: async (updated) => {
                 console.log("ORDER UPDATED >> ", updated);

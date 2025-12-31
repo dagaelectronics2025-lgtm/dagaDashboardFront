@@ -7,15 +7,17 @@ import {
     DropdownMenuTrigger
 } from "@/shared/components/dropdown-menu.tsx";
 import {Button} from "@/shared/components/button.tsx";
-import {EllipsisVertical} from "lucide-react";
-import {ModalEditStore} from "@/modules/stores/components/modal/ModalEditStore.tsx";
+import {EllipsisVertical, PencilIcon, Trash2} from "lucide-react";
 import type {Store} from "@/modules/stores/data/types.ts";
 
 interface TableActionsStoreProps {
     store: Store
+    onEdit: (store: Store) => void
+    onDelete: (store: Store) => void | Promise<void>
 }
 
-export const TableActionsStore = ({store}: TableActionsStoreProps) => {
+export const TableActionsStore = ({store, onEdit, onDelete}: TableActionsStoreProps) => {
+
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -26,15 +28,23 @@ export const TableActionsStore = ({store}: TableActionsStoreProps) => {
             <DropdownMenuContent className="bg-white w-56">
                 <DropdownMenuLabel>Acciones</DropdownMenuLabel>
                 <DropdownMenuSeparator className=""/>
-                <DropdownMenuItem asChild>
-                    <div className="w-full cursor-pointer">
-                        <ModalEditStore store={store}/>
+                <DropdownMenuItem onSelect={(e) => {
+                    e.preventDefault()
+                    onEdit(store)
+                }}>
+                    <div className="flex items-center gap-2">
+                        <PencilIcon className="h-4 w-4"/>
+                        <span>Editar</span>
                     </div>
                 </DropdownMenuItem>
-                <DropdownMenuItem
-                    onClick={() => console.log("ELIMINAR", store.id)}
-                >
-                    Eliminar
+                <DropdownMenuItem onSelect={(e) => {
+                    e.preventDefault()
+                    void onDelete(store)
+                }}>
+                    <div className="flex items-center gap-2 text-red-600">
+                        <Trash2 className="h-4 w-4"/>
+                        <span>Eliminar</span>
+                    </div>
                 </DropdownMenuItem>
             </DropdownMenuContent>
         </DropdownMenu>

@@ -90,6 +90,19 @@ export const useUserController = () => {
         })
     }
 
+    const deleteUserById = async (user: User) => {
+        const ok = window.confirm(`¿Eliminar el usuario "${user.name}"?`)
+        if (!ok) return
+
+        setSelectedUser(user)
+        await deleteUser(undefined, {
+            onSuccess: async () => {
+                toast.success("Usuario eliminado exitosamente", {className: "success"})
+                await refetchUsers()
+            }
+        })
+    }
+
     return {
         // DATA
         users,
@@ -102,6 +115,7 @@ export const useUserController = () => {
         onCreate,
         onUpdate,
         onDelete,
+        deleteUserById,
         setShowDialogCreate,
         setShowDialogEdit,
         setSelectedUser

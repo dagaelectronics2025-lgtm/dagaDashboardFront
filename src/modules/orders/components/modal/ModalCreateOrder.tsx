@@ -14,10 +14,10 @@ import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage} from "@/
 import {useOrderController} from "@/modules/orders/hooks/useOrderController.tsx";
 
 export const ModalCreateOrder = () => {
-    const {formCreate, onCreate} = useOrderController();
+    const {formCreate, onCreate, showDialogCreate, setShowDialogCreate} = useOrderController();
 
     return (
-        <Dialog>
+        <Dialog open={showDialogCreate} onOpenChange={setShowDialogCreate}>
             <DialogTrigger asChild>
                 <Button variant="outline">Crear Orden</Button>
             </DialogTrigger>

@@ -21,8 +21,13 @@ export const useOrdersApi = () => {
         useMutation({
             mutationFn: async (dto: CreateOrderDto) => {
                 await fakeDelay(200);
+
+                const nextNumber = ordersMemory.length + 1;
+                const nextCode = `ORD-${String(nextNumber).padStart(3, "0")}`;
+
                 const newOrder: Order = {
                     id: crypto.randomUUID(),
+                    code: nextCode,
                     ...dto,
                 };
                 ordersMemory = [newOrder, ...ordersMemory];
