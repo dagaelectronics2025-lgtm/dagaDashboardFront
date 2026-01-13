@@ -3,9 +3,12 @@ import {Input} from "@/shared/components/input.tsx";
 import {Button} from "@/shared/components/button.tsx";
 import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage} from "@/shared/components/form.tsx";
 import {useSignInController} from "@/modules/sign-in/hooks/useSignInController.tsx";
+import {useState} from 'react';
+import {Eye, EyeOff} from 'lucide-react'
 
 export default function SignIn() {
     const {form, onSubmit, authError} = useSignInController()
+    const [showPassword, setShowPassword] = useState(false)
     return (
         <div className="min-h-screen w-full flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
             <div className="max-w-md w-full space-y-8">
@@ -44,9 +47,28 @@ export default function SignIn() {
                                             <FormItem>
                                                 <FormLabel>Contraseña</FormLabel>
                                                 <FormControl>
-                                                    <Input type='password' placeholder="********" {...field}
-                                                           className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-                                                    />
+                                                    <div className="relative">
+                                                        <Input
+                                                            type={showPassword ? 'text' : 'password'}
+                                                            placeholder="********"
+                                                            {...field}
+                                                            className="w-full px-4 py-3 pr-11 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                                                        />
+                                                        <Button
+                                                            type="button"
+                                                            variant="ghost"
+                                                            size="sm"
+                                                            onClick={() => setShowPassword((v) => !v)}
+                                                            className="absolute right-1 top-1/2 -translate-y-1/2 h-7 w-7 p-0 text-stone-600 hover:text-stone-900"
+                                                            aria-label={showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'}
+                                                        >
+                                                            {showPassword ? (
+                                                                <EyeOff className="h-4 w-4"/>
+                                                            ) : (
+                                                                <Eye className="h-4 w-4"/>
+                                                            )}
+                                                        </Button>
+                                                    </div>
                                                 </FormControl>
                                                 <FormMessage className="text-red-500"/>
                                             </FormItem>
